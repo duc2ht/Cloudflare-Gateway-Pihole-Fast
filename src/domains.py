@@ -30,7 +30,7 @@ class DomainConverter:
                     url.strip() for url in file if not url.startswith("#") and url.strip()
                 ]
         return urls
-    
+
     def read_urls_from_env(self, env_var):
         urls = os.getenv(env_var, "")
         return [
@@ -38,9 +38,10 @@ class DomainConverter:
         ]
 
     def read_urls(self, env_var):
-        file_path = self.env_file_map[env_var]
-        urls = self.read_urls_from_file(file_path)
-        urls += self.read_urls_from_env(env_var)
+        urls = self.read_urls_from_env(env_var)
+        if not urls:
+            file_path = self.env_file_map[env_var]
+            urls = self.read_urls_from_file(file_path)
         return urls
 
     def download_file(self, url):
@@ -66,7 +67,6 @@ class DomainConverter:
         for url in self.whitelist_urls:
             white_content += self.download_file(url)
         
-        # Check for dynamic blacklist and whitelist in environment variables
         dynamic_blacklist = os.getenv("DYNAMIC_BLACKLIST", "")
         dynamic_whitelist = os.getenv("DYNAMIC_WHITELIST", "")
         
