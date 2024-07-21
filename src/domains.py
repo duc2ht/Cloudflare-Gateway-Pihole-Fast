@@ -30,12 +30,10 @@ class DomainConverter:
                     url.strip() for url in file if not url.startswith("#") and url.strip()
                 ]
         return urls
-    
+
     def read_urls_from_env(self, env_var):
         urls = os.getenv(env_var, "")
-        return [
-            url.strip() for url in urls.split() if url.strip()
-        ]
+        return [url.strip() for url in urls.split() if url.strip()]
 
     def read_urls(self, env_var):
         urls = self.read_urls_from_env(env_var)
